@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -106,8 +107,6 @@ public class MainActivity extends AppCompatActivity
         tvDate = (TextView) findViewById(R.id.tvDate);
         layoutDate = (RelativeLayout) findViewById(R.id.layout_calendar);
         layoutDate.setOnClickListener(this);
-
-        drawer.openDrawer(Gravity.LEFT);
     }
 
     public void init_list(ArrayList<HashMap<String, Object>> arrayList, int length){
@@ -159,6 +158,8 @@ public class MainActivity extends AppCompatActivity
 
                 listStation.set(1, map);
             }
+        }else{
+            drawer.openDrawer(Gravity.LEFT);
         }
 
         if (isNetworkAvailable()){
@@ -169,8 +170,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
     }
@@ -265,18 +265,22 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = null;
-        switch (position){
-            case 0:
-                intent = new Intent(MainActivity.this, ChooseActivity.class);
-                intent.putExtra(TAG_DATA, "from");
-                startActivity(intent);
-                break;
+        if (networkState) {
+            switch (position) {
+                case 0:
+                    intent = new Intent(MainActivity.this, ChooseActivity.class);
+                    intent.putExtra(TAG_DATA, "from");
+                    startActivity(intent);
+                    break;
 
-            case 1:
-                intent = new Intent(MainActivity.this, ChooseActivity.class);
-                intent.putExtra(TAG_DATA, "to");
-                startActivity(intent);
-                break;
+                case 1:
+                    intent = new Intent(MainActivity.this, ChooseActivity.class);
+                    intent.putExtra(TAG_DATA, "to");
+                    startActivity(intent);
+                    break;
+            }
+        }else{
+            Toast.makeText(this, "Нет подключения к интернету!", Toast.LENGTH_SHORT).show();
         }
     }
 
