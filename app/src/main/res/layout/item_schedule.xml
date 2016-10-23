@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image_station"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/image_station">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvStation"
+            android:textSize="21sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@android:color/white"
+            android:typeface="normal"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal|bold"
+            android:layout_centerInParent="false"
+            android:hint="Выберите..."
+            android:textColorHint="@color/white_100" />
+
+        <TextView
+            android:text="Россия, республика Татарстан"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvCountry_Region"
+            android:layout_below="@+id/tvStation"
+            android:textColor="@color/white_100"
+            android:textStyle="normal|italic"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:text="Савёлки, Савёлкинсвий район"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSity_District"
+            android:layout_below="@+id/tvCountry_Region"
+            android:layout_marginTop="5dp"
+            android:textStyle="normal|italic"
+            android:textColor="@color/white_100"
+            android:layout_marginBottom="14dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

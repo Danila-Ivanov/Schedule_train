@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/layout_schedule">
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lvSchedule"
+        android:layout_below="@+id/etSearch" />
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_details_item"
+        android:padding="14dp"
+        android:background="@color/colorPrimary_135"
+        android:layout_centerInParent="true"
+        android:layout_width="350dp"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:id="@+id/imageView"
+                android:layout_below="@+id/tvNameStation"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="3dp" />
+
+            <TextView
+                android:text="Савёлки"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNameStation"
+                android:textSize="30sp"
+                android:textStyle="normal|bold"
+                android:layout_centerHorizontal="true" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout_details"
+                android:layout_below="@+id/imageView"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:text="Страна:"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView10"
+                    android:textSize="16sp"
+                    android:textStyle="normal|italic" />
+
+                <TextView
+                    android:text="Россия"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvCountry_toast"
+                    android:layout_marginLeft="21dp"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:text="Регион:"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView11"
+                    android:layout_marginTop="14dp"
+                    android:textSize="16sp"
+                    android:textStyle="normal|italic" />
+
+                <TextView
+                    android:text="Республика Татарстан"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvRegion_toast"
+                    android:layout_marginLeft="21dp"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:text="Район:"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView8"
+                    android:layout_marginTop="14dp"
+                    android:textSize="16sp"
+                    android:textStyle="normal|italic" />
+
+                <TextView
+                    android:text="Савёлкинский район"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvDistrict_toast"
+                    android:layout_marginLeft="21dp"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:text="Город:"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView4"
+                    android:layout_marginTop="14dp"
+                    android:textSize="16sp"
+                    android:textStyle="normal|italic" />
+
+                <TextView
+                    android:text="Савёлки"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvSity_toast"
+                    android:layout_marginLeft="21dp"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout_btns_toast"
+                android:layout_below="@+id/layout_details"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary">
+
+                <Button
+                    android:text="Выбрать"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnChoose_toast"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="2dp" />
+
+                <Button
+                    android:text="Отмена"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnCancle_toast"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

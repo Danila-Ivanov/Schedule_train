@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="ru.dtechnologies.schedule_train.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvStations" />
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_calendar"
+        android:layout_below="@+id/lvStations"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="7dp"
+        android:clickable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDate"
+            android:textSize="21sp"
+            android:textStyle="normal|bold|italic"
+            android:fontFamily="serif"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="21dp"
+            android:clickable="true"
+            android:text="21.10.2016" />
+
+        <TextView
+            android:text="Дата: "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textSize="16sp"
+            android:textStyle="normal|italic" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

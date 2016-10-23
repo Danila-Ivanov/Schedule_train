@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Schedule</string>
+    <string name="btn_schedule">Расписание</string>
+    <string name="btn_about">О приложении</string>
+
+    <string name="search_hint">Введите название станции...</string>
+
+    <string name="title_dialog">О приложении</string>
+    <string name="btn_OK"> OK </string>
+
+    <string name="menu_search">Поиск</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
