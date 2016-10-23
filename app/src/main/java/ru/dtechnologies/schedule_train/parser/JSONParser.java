@@ -28,30 +28,33 @@ public class JSONParser {
 
     public static final String LOG_TAG = "myLogs";
 
-    static InputStream is = null;
-    static JSONObject jObj = null;
-    static String json = "";
+    private static InputStream is = null;
+    private static JSONObject jObj = null;
+    private static String json = "";
 
     // constructor
     public JSONParser() {
 
     }
 
+    public JSONObject getJSON(){
+        return jObj;
+    }
+
     // метод получение json объекта по url
-    // используя HTTP запрос и методы POST или GET
-    public JSONObject makeHttpRequest(String url, String method) {
+    // используя HTTP запрос и метод GET
+    public JSONObject makeHttpRequest(String url, List<NameValuePair> params) {
 
         // Создаем HTTP запрос
         try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            String paramString = URLEncodedUtils.format(params, "utf-8");
+            url += "?" + paramString;
+            HttpGet httpGet = new HttpGet(url);
 
-            if(method == "GET"){
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(url);
-
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
-            }
+            HttpResponse httpResponse = httpClient.execute(httpGet);
+            HttpEntity httpEntity = httpResponse.getEntity();
+            is = httpEntity.getContent();
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

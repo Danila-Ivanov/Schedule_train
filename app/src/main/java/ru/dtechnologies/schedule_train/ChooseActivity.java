@@ -170,8 +170,12 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
          * */
         protected String doInBackground(String... args) {
 
-                // получаем JSON строк с URL
-                JSONObject json = jParser.makeHttpRequest(url_get_schedule, "GET");
+            // получаем JSON строк с URL
+            JSONObject json = jParser.getJSON();
+            if (json == null) {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                json = jParser.makeHttpRequest(url_get_schedule, params);
+            }
 
                 try {
                     JSONArray base_table = null;
@@ -207,7 +211,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
                     e.printStackTrace();
                 }
 
-            /*HashMap<String, String> map = new HashMap<String, String>();
+           /* HashMap<String, String> map = new HashMap<String, String>();
 
             //map.put(TAG_ID, p.getString(TAG_ID));
             map.put(TAG_NAME_STATION, "Werty");
