@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener,
         View.OnClickListener{
 
+    // теги для заполнения полей станций отправления/прибытия
     private static final String LOG_TAG = "myLogs";
     private static final String TAG_DATA = "extra_data";
 
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     final int station_d = R.drawable.icon_station_from;
     final int station_a = R.drawable.icon_station_in;
 
+    // переменные для работы с SharedPreferences
     final String SAVED_STATION_A = "saved_station_a";
     final String SAVED_STATION_D = "saved_station_d";
     final String SAVED_LOCATION_A1 = "saved_location_a1";
@@ -67,23 +69,24 @@ public class MainActivity extends AppCompatActivity
     final String SAVED_LOCATION_D1 = "saved_location_d1";
     final String SAVED_LOCATION_D2 = "saved_location_d2";
     final String SAVED_DATE = "saved_date";
-    boolean networkState = true;
 
+    // элементы экрана
     DrawerLayout drawer;
     ListView lvStation;
     RelativeLayout layoutDate;
-
     SimpleAdapter adapter;
     TextView tvDate;
 
+    // хранение данных
     SharedPreferences sPref;
-
     ArrayList<HashMap<String, Object>> listStation = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Navigation Drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -96,19 +99,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // нахождение элементов экрана
+        tvDate = (TextView) findViewById(R.id.tvDate);
+        layoutDate = (RelativeLayout) findViewById(R.id.layout_calendar);
         lvStation = (ListView) findViewById(R.id.lvStations);
+        // обработчики событий
+        layoutDate.setOnClickListener(this);
+        lvStation.setOnItemClickListener(this);
+
+        // инициализация массива начальными значениями, создание адаптера для списка(отправление/прибытие)
         init_list(listStation, 2);
         adapter = new SimpleAdapter(MainActivity.this, listStation, R.layout.item_schedule ,
                 new String[]{ TAG_NAME_STATION, TAG_LOCATION_1, TAG_LOCATION_2, TAG_IMAGE},
                 new int[]{R.id.tvStation, R.id.tvCountry_Region, R.id.tvSity_District, R.id.image_station});
         lvStation.setAdapter(adapter);
-        lvStation.setOnItemClickListener(this);
-
-        tvDate = (TextView) findViewById(R.id.tvDate);
-        layoutDate = (RelativeLayout) findViewById(R.id.layout_calendar);
-        layoutDate.setOnClickListener(this);
     }
 
+    // метод инициализации массива начальными значениями
     public void init_list(ArrayList<HashMap<String, Object>> arrayList, int length){
         HashMap<String, Object> map = null;
         for (int i = 0; i < length; i++) {
@@ -130,16 +137,22 @@ public class MainActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
 
-
+        // проверка на наличие данных в intent
         if(getIntent().hasExtra(TAG_DATA)) {
+            // получаем тип данных (from/to)
             String str = getIntent().getStringExtra(TAG_DATA);
+
+            /* загрузка значений из SharedPreferences (нужно, если пользователь уже делал
+               выбор чего-либо (выбор пункта отправки или пункта назначения, или даты))*/
             loadSetting();
 
+            // устанавливаем дату
             if (tvDate.getText().length() == 0) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                 tvDate.setHint(sdf.format(new Date(System.currentTimeMillis())));
             }
 
+            // устанавливаем пункт отправления
             if (str.equals("from")) {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(TAG_NAME_STATION, getIntent().getStringExtra(TAG_NAME_STATION));
@@ -149,6 +162,8 @@ public class MainActivity extends AppCompatActivity
 
                 listStation.set(0, map);
             }
+
+            // устанавливаем пункт прибытия
             if (str.equals("to")) {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(TAG_NAME_STATION, getIntent().getStringExtra(TAG_NAME_STATION));
@@ -159,25 +174,15 @@ public class MainActivity extends AppCompatActivity
                 listStation.set(1, map);
             }
         }else{
+
+            // если не данных в intent то => это открытие приложения => открываем меню
             drawer.openDrawer(Gravity.LEFT);
         }
-
-        if (isNetworkAvailable()){
-            networkState = true;
-        }else{
-            networkState = false;
-        }
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
-    }
-
+    // методы работы с Navigation Drawer    ------------------------------------------------------>>
     @Override
     public void onBackPressed() {
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -213,7 +218,67 @@ public class MainActivity extends AppCompatActivity
         }
         return true;
     }
+    //--------------------------------------------------------------------------------------------<<
 
+
+    // нажатие на пункт списка станций отправления/прибытия
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = null;
+        if (isNetworkAvailable()) {
+            switch (position) {
+                case 0:
+                    intent = new Intent(MainActivity.this, ChooseActivity.class);
+                    intent.putExtra(TAG_DATA, "from");
+                    startActivity(intent);
+                    break;
+
+                case 1:
+                    intent = new Intent(MainActivity.this, ChooseActivity.class);
+                    intent.putExtra(TAG_DATA, "to");
+                    startActivity(intent);
+                    break;
+            }
+        }else{
+            Toast.makeText(this, "Нет подключения к интернету!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // обработчик нажатия
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            // нажатие на поле даты
+            case R.id.layout_calendar:
+                // вызов диалогового окна выбора даты
+                callDatePicker();
+                break;
+        }
+    }
+
+    // вызов диалогового окна выбора даты
+    private void callDatePicker() {
+        // получаем текущую дату
+        final Calendar cal = Calendar.getInstance();
+        int mYear = cal.get(Calendar.YEAR);
+        int mMonth = cal.get(Calendar.MONTH);
+        int mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+        // инициализируем диалог выбора даты текущими значениями
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String editTextDateParam = dayOfMonth + "." + (monthOfYear + 1) + "." + year;
+                        tvDate.setText(editTextDateParam);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+
+    // методы работы с SharedPreferences (сохранение значений/загрузка значений) ----------------->>
     public void saveSetting(){
         sPref = getSharedPreferences("SCHEDULE_SETTING", MODE_PRIVATE);
         SharedPreferences.Editor edHelp = sPref.edit();
@@ -236,19 +301,19 @@ public class MainActivity extends AppCompatActivity
         HashMap<String, Object> map = null;
         // загрузка данных отправления
         map = new HashMap<>();
-            map.put(TAG_NAME_STATION, sPref.getString(SAVED_STATION_D, ""));
-            map.put(TAG_LOCATION_1, sPref.getString(SAVED_LOCATION_D1, ""));
-            map.put(TAG_LOCATION_2, sPref.getString(SAVED_LOCATION_D2, ""));
-            map.put(TAG_IMAGE, station_d);
+        map.put(TAG_NAME_STATION, sPref.getString(SAVED_STATION_D, ""));
+        map.put(TAG_LOCATION_1, sPref.getString(SAVED_LOCATION_D1, ""));
+        map.put(TAG_LOCATION_2, sPref.getString(SAVED_LOCATION_D2, ""));
+        map.put(TAG_IMAGE, station_d);
 
         listStation.set(0, map);
 
         // загрузка данных прибытия
         map = new HashMap<>();
-            map.put(TAG_NAME_STATION, sPref.getString(SAVED_STATION_A, ""));
-            map.put(TAG_LOCATION_1, sPref.getString(SAVED_LOCATION_A1, ""));
-            map.put(TAG_LOCATION_2, sPref.getString(SAVED_LOCATION_A2, ""));
-            map.put(TAG_IMAGE, station_a);
+        map.put(TAG_NAME_STATION, sPref.getString(SAVED_STATION_A, ""));
+        map.put(TAG_LOCATION_1, sPref.getString(SAVED_LOCATION_A1, ""));
+        map.put(TAG_LOCATION_2, sPref.getString(SAVED_LOCATION_A2, ""));
+        map.put(TAG_IMAGE, station_a);
 
         listStation.set(1, map);
 
@@ -261,55 +326,14 @@ public class MainActivity extends AppCompatActivity
 
         saveSetting();
     }
+    //--------------------------------------------------------------------------------------------<<
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = null;
-        if (networkState) {
-            switch (position) {
-                case 0:
-                    intent = new Intent(MainActivity.this, ChooseActivity.class);
-                    intent.putExtra(TAG_DATA, "from");
-                    startActivity(intent);
-                    break;
 
-                case 1:
-                    intent = new Intent(MainActivity.this, ChooseActivity.class);
-                    intent.putExtra(TAG_DATA, "to");
-                    startActivity(intent);
-                    break;
-            }
-        }else{
-            Toast.makeText(this, "Нет подключения к интернету!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.layout_calendar:
-                callDatePicker();
-                break;
-        }
-    }
-
-    private void callDatePicker() {
-        // получаем текущую дату
-        final Calendar cal = Calendar.getInstance();
-        int mYear = cal.get(Calendar.YEAR);
-        int mMonth = cal.get(Calendar.MONTH);
-        int mDay = cal.get(Calendar.DAY_OF_MONTH);
-
-        // инициализируем диалог выбора даты текущими значениями
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String editTextDateParam = dayOfMonth + "." + (monthOfYear + 1) + "." + year;
-                        tvDate.setText(editTextDateParam);
-                    }
-                }, mYear, mMonth, mDay);
-        datePickerDialog.show();
+    // метод проверки доступности интернета
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 
 }

@@ -39,36 +39,18 @@ public class JSONParser {
 
     // метод получение json объекта по url
     // используя HTTP запрос и методы POST или GET
-    public JSONObject makeHttpRequest(String url, String method, List<NameValuePair> params) {
+    public JSONObject makeHttpRequest(String url, String method) {
 
         // Создаем HTTP запрос
         try {
 
-            // проверяем метод HTTP запроса
-            if(method == "POST"){
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(url);
-                httpPost.setEntity(new UrlEncodedFormEntity(params));
-
-                Log.d(LOG_TAG, "params: "+params.toString());
-
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
-
-                Log.d(LOG_TAG, "is: "+is.toString());
-            }else
             if(method == "GET"){
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String paramString = URLEncodedUtils.format(params, "utf-8");
-                url += "?" + paramString;
                 HttpGet httpGet = new HttpGet(url);
-                Log.d(LOG_TAG, "url: "+url);
 
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
-                Log.d(LOG_TAG, "is: "+is.toString());
             }
 
         } catch (UnsupportedEncodingException e) {
@@ -86,7 +68,7 @@ public class JSONParser {
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
             }
-            Log.d(LOG_TAG, "line: "+line);
+
             is.close();
             json = sb.toString();
         } catch (Exception e) {
@@ -95,7 +77,6 @@ public class JSONParser {
 
         // пытаемся распарсить строку в JSON объект
         try {
-            Log.d(LOG_TAG, "line: "+json.toString());
             jObj = new JSONObject(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());

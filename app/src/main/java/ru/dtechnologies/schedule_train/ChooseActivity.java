@@ -44,25 +44,23 @@ import ru.dtechnologies.schedule_train.parser.JSONParser;
  * Created by Admin on 20.10.2016.
  */
 
-public class ChooseActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class ChooseActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,
+        View.OnClickListener {
 
-    ListView lvSchedule;
-    TextView tvCountry, tvRegion, tvDiscrict, tvSity, tvName;
-    Button btnCancle, btnChoose;
-    RelativeLayout layoutInfo;
-
+    // различные теги для получения/сохранения значений
     private static final String LOG_TAG = "myLogs";
 
+    // передача данных через intent
     private static final String TAG_DATA = "extra_data";
 
+    // таблицы станций прибытия/отправления
     private static final String TAG_TABLE_FROM = "citiesFrom";
     private static final String TAG_TABLE_TO = "citiesTo";
-
+    // данные станции
     private static final String TAG_COUNTRY = "countryTitle";
     private static final String TAG_REGION = "regionTitle";
     private static final String TAG_DISTRICT = "districtTitle";
     private static final String TAG_SITY = "cityTitle";
-    private static final String TAG_ID = "stationId";
     private static final String TAG_LOCATION_1 = "location_1";
     private static final String TAG_LOCATION_2 = "location_2";
 
@@ -72,52 +70,46 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
     private SearchView mSearchView;
     private MenuItem searchMenuItem;
 
-
-
-    // url получения списка всех
+    // url получения списка всех станций отправления/прибытия
     private static String url_get_schedule = "https://raw.githubusercontent.com/tutu-ru/hire_android_test/master/allStations.json";
-
-    private ProgressDialog pDialog;
     // Создаем JSON парсер
     JSONParser jParser = new JSONParser();
 
+    //
     ArrayList<HashMap<String, String>> listStation = new ArrayList<HashMap<String, String>>();
     SimpleAdapter adapter;
     String scheduleTable;
+
+    // элементы экрана
+    ListView lvSchedule;
+    TextView tvCountry, tvRegion, tvDiscrict, tvSity, tvName;
+    Button btnCancle, btnChoose;
+    RelativeLayout layoutInfo;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
 
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.d(LOG_TAG, "query = "+query);
-
-        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            String uri = intent.getDataString();
-            Log.d(LOG_TAG, "uri = "+uri);
-        }
-
+        // находим элементы экрана
         lvSchedule = (ListView) findViewById(R.id.lvSchedule);
-
         layoutInfo = (RelativeLayout) findViewById(R.id.layout_details_item);
         tvName = (TextView) findViewById(R.id.tvNameStation);
         tvCountry = (TextView) findViewById(R.id.tvCountry_toast);
         tvRegion = (TextView) findViewById(R.id.tvRegion_toast);
         tvDiscrict = (TextView) findViewById(R.id.tvDistrict_toast);
         tvSity = (TextView) findViewById(R.id.tvSity_toast);
-
         btnChoose = (Button) findViewById(R.id.btnChoose_toast);
         btnCancle = (Button) findViewById(R.id.btnCancle_toast);
-
+        //
         btnChoose.setOnClickListener(this);
         btnCancle.setOnClickListener(this);
-
         lvSchedule.setOnItemClickListener(this);
 
+        // получаем данные из intent
         scheduleTable = getIntent().getStringExtra(TAG_DATA);
+        // запускаем поток чтения данных
         new LoadSchedule().execute(scheduleTable);
     }
 
@@ -126,6 +118,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
     public void onClick(View v) {
         Intent intent = null;
         switch (v.getId()){
+            // кнопка выбора данной станции => переход на главное активити
             case R.id.btnChoose_toast:
                 intent = new Intent(ChooseActivity.this, MainActivity.class);
                 intent.putExtra(TAG_NAME_STATION, tvName.getText());
@@ -148,12 +141,14 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
                 startActivity(intent);
                 break;
 
+            // закрытие окна доп. информации
             case R.id.btnCancle_toast:
                 layoutInfo.setVisibility(View.INVISIBLE);
                 break;
         }
     }
 
+    // поток чтения json
     class LoadSchedule extends AsyncTask<String, String, String> {
 
         /**
@@ -171,21 +166,20 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
         }
 
         /**
-         * Получаем все продукт из url
+         * Получаем станции из url
          * */
         protected String doInBackground(String... args) {
-               /* // Будет хранить параметры
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
                 // получаем JSON строк с URL
-                JSONObject json = jParser.makeHttpRequest(url_get_schedule, "GET", params);
+                JSONObject json = jParser.makeHttpRequest(url_get_schedule, "GET");
 
                 try {
                     JSONArray base_table = null;
                     if (args[0] == "from"){
-                        // Получаем масив
+                        // Получаем масив станций отправления
                         base_table = json.getJSONArray(TAG_TABLE_FROM);
                     }else{
-                        // Получаем масив
+                        // Получаем масив станций прибытия
                         base_table = json.getJSONArray(TAG_TABLE_TO);
                     }
 
@@ -196,15 +190,13 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
 
                         for (int j = 0; j < table_stations.length(); j++) {
                             JSONObject p = table_stations.getJSONObject(j);
-                            HashMap<String, String> map = new HashMap<String, String>();
 
-                            Log.d(LOG_TAG, "Name = " + p.getString(TAG_NAME_STATION));
-                            //map.put(TAG_ID, p.getString(TAG_ID));
-                            map.put(TAG_NAME_STATION, p.getString(TAG_NAME_STATION));
-                            map.put(TAG_COUNTRY, p.getString(TAG_COUNTRY));
-                            map.put(TAG_REGION, p.getString(TAG_REGION));
-                            map.put(TAG_SITY, p.getString(TAG_SITY));
-                            map.put(TAG_DISTRICT, p.getString(TAG_DISTRICT));
+                            HashMap<String, String> map = new HashMap<String, String>();
+                                map.put(TAG_NAME_STATION, p.getString(TAG_NAME_STATION));
+                                map.put(TAG_COUNTRY, p.getString(TAG_COUNTRY));
+                                map.put(TAG_REGION, p.getString(TAG_REGION));
+                                map.put(TAG_SITY, p.getString(TAG_SITY));
+                                map.put(TAG_DISTRICT, p.getString(TAG_DISTRICT));
 
                             listStation.add(map);
                         }
@@ -214,8 +206,8 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                */
-            HashMap<String, String> map = new HashMap<String, String>();
+
+            /*HashMap<String, String> map = new HashMap<String, String>();
 
             //map.put(TAG_ID, p.getString(TAG_ID));
             map.put(TAG_NAME_STATION, "Werty");
@@ -235,7 +227,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
             map.put(TAG_SITY, "Кимовск");
             map.put(TAG_DISTRICT, "Тульская область");
 
-            listStation.add(map);
+            listStation.add(map);*/
 
             return null;
         }
@@ -244,11 +236,12 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
          * После завершения фоновой задачи закрываем прогрес диалог
          * **/
         protected void onPostExecute(String arg) {
-            // закрываем прогресс диалог после получение все продуктов
+            // закрываем прогресс диалог
             pDialog.dismiss();
 
             Toast.makeText(ChooseActivity.this, "Рассписание обновлено!", Toast.LENGTH_SHORT).show();
 
+            // обновление адаптера
             adapter = new SimpleAdapter(ChooseActivity.this, listStation, R.layout.item,
                     new String[] {TAG_NAME_STATION, TAG_COUNTRY, TAG_REGION, TAG_DISTRICT, TAG_SITY},
                     new int[] {R.id.tvStation, R.id.tvCountry, R.id.tvRegion, R.id.tvDistrict, R.id.tvSity});
@@ -256,6 +249,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
         }
     }
 
+    // нажатие на пункт списка
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -270,6 +264,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
 
     }
 
+    // поиск значения по тегу в строке элементов (используется в onItemClick)
     public String search(String key, String string){
         String value = null;
         if (string.contains(key)){
@@ -284,6 +279,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
         return value;
     }
 
+    // методы меню  ------------------------------------------------------------------------------>>
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar_choose, menu);
@@ -296,7 +292,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // newText is text entered by user to SearchView
+                // поиск по слову в списке
                 ChooseActivity.this.adapter.getFilter().filter(newText);
                 return false;
             }
@@ -311,12 +307,14 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            // нажатие кнопки home
             case R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+    //--------------------------------------------------------------------------------------------<<
 
     @Override
     protected void onPause() {
