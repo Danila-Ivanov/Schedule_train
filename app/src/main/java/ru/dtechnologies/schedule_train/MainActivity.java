@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG_LOCATION_2 = "location_2";
     private static final String TAG_NAME_STATION = "stationTitle";
     private static final String TAG_IMAGE = "image";
+    private static final String TAG_TYPE = "type";
     final int station_d = R.drawable.icon_station_from;
     final int station_a = R.drawable.icon_station_in;
 
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d(LOG_TAG, "onCreate");
+
         // Navigation Drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,8 +114,9 @@ public class MainActivity extends AppCompatActivity
         // инициализация массива начальными значениями, создание адаптера для списка(отправление/прибытие)
         init_list(listStation, 2);
         adapter = new SimpleAdapter(MainActivity.this, listStation, R.layout.item_schedule ,
-                new String[]{ TAG_NAME_STATION, TAG_LOCATION_1, TAG_LOCATION_2, TAG_IMAGE},
-                new int[]{R.id.tvStation, R.id.tvCountry_Region, R.id.tvSity_District, R.id.image_station});
+                new String[]{ TAG_NAME_STATION, TAG_LOCATION_1, TAG_LOCATION_2, TAG_IMAGE, TAG_TYPE},
+                new int[]{R.id.tvStation, R.id.tvCountry_Region, R.id.tvSity_District,
+                        R.id.image_station, R.id.tvType});
         lvStation.setAdapter(adapter);
     }
 
@@ -125,8 +130,10 @@ public class MainActivity extends AppCompatActivity
             map.put(TAG_LOCATION_2, "");
             if (i == 0){
                 map.put(TAG_IMAGE, station_d);
+                map.put(TAG_TYPE, getResources().getString(R.string.text_from));
             }else{
                 map.put(TAG_IMAGE, station_a);
+                map.put(TAG_TYPE, getResources().getString(R.string.text_where));
             }
 
             arrayList.add(i, map);
@@ -159,6 +166,7 @@ public class MainActivity extends AppCompatActivity
                 map.put(TAG_LOCATION_1, getIntent().getStringExtra(TAG_LOCATION_1));
                 map.put(TAG_LOCATION_2, getIntent().getStringExtra(TAG_LOCATION_2));
                 map.put(TAG_IMAGE, station_d);
+                map.put(TAG_TYPE, getResources().getString(R.string.text_from));
 
                 listStation.set(0, map);
             }
@@ -170,6 +178,7 @@ public class MainActivity extends AppCompatActivity
                 map.put(TAG_LOCATION_1, getIntent().getStringExtra(TAG_LOCATION_1));
                 map.put(TAG_LOCATION_2, getIntent().getStringExtra(TAG_LOCATION_2));
                 map.put(TAG_IMAGE, station_a);
+                map.put(TAG_TYPE, getResources().getString(R.string.text_where));
 
                 listStation.set(1, map);
             }
@@ -231,16 +240,18 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(MainActivity.this, ChooseActivity.class);
                     intent.putExtra(TAG_DATA, "from");
                     startActivity(intent);
+                    finish();
                     break;
 
                 case 1:
                     intent = new Intent(MainActivity.this, ChooseActivity.class);
                     intent.putExtra(TAG_DATA, "to");
                     startActivity(intent);
+                    finish();
                     break;
             }
         }else{
-            Toast.makeText(this, "Нет подключения к интернету!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.no_connection_network), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -305,6 +316,7 @@ public class MainActivity extends AppCompatActivity
         map.put(TAG_LOCATION_1, sPref.getString(SAVED_LOCATION_D1, ""));
         map.put(TAG_LOCATION_2, sPref.getString(SAVED_LOCATION_D2, ""));
         map.put(TAG_IMAGE, station_d);
+        map.put(TAG_TYPE, getResources().getString(R.string.text_from));
 
         listStation.set(0, map);
 
@@ -314,20 +326,26 @@ public class MainActivity extends AppCompatActivity
         map.put(TAG_LOCATION_1, sPref.getString(SAVED_LOCATION_A1, ""));
         map.put(TAG_LOCATION_2, sPref.getString(SAVED_LOCATION_A2, ""));
         map.put(TAG_IMAGE, station_a);
+        map.put(TAG_TYPE, getResources().getString(R.string.text_where));
 
         listStation.set(1, map);
 
         tvDate.setText(sPref.getString(SAVED_DATE, ""));
     }
+    //--------------------------------------------------------------------------------------------<<
+
 
     @Override
     public void onStop() {
         super.onStop();
-
         saveSetting();
     }
-    //--------------------------------------------------------------------------------------------<<
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
 
     // метод проверки доступности интернета
     private boolean isNetworkAvailable() {

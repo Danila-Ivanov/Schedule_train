@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:background="@color/colorPrimary"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/image_station"
@@ -15,24 +15,43 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/image_station">
+        android:layout_toRightOf="@+id/image_station"
+        android:id="@+id/relativeLayout">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:id="@+id/imageView3"
+            android:background="@color/white_100"
+            android:layout_alignParentBottom="true"
+            android:layout_height="1dp" />
+
+        <TextView
+            android:text="@string/text_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvType"
+            android:textColor="@android:color/white"
+            android:textStyle="normal|italic"
+            android:layout_marginTop="3dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvStation"
             android:textSize="21sp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/white"
             android:typeface="normal"
             android:fontFamily="sans-serif"
             android:textStyle="normal|bold"
             android:layout_centerInParent="false"
-            android:hint="Выберите..."
-            android:textColorHint="@color/white_100" />
+            android:hint="@string/hint_choose"
+            android:textColorHint="@color/white_100"
+            android:layout_below="@+id/tvType"
+            android:layout_marginLeft="14dp" />
 
         <TextView
             android:text="Россия, республика Татарстан"
@@ -42,7 +61,8 @@
             android:layout_below="@+id/tvStation"
             android:textColor="@color/white_100"
             android:textStyle="normal|italic"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="14dp" />
 
         <TextView
             android:text="Савёлки, Савёлкинсвий район"
@@ -53,7 +73,8 @@
             android:layout_marginTop="5dp"
             android:textStyle="normal|italic"
             android:textColor="@color/white_100"
-            android:layout_marginBottom="14dp" />
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="14dp" />
 
     </RelativeLayout>
 

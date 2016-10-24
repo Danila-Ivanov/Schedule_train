@@ -54,7 +54,7 @@ public class SplashScreen extends AppCompatActivity {
         protected String doInBackground(String... args) {
             // получаем JSON строк с URL
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-           jParser.makeHttpRequest(url_get_schedule, params);
+            jParser.makeHttpRequest(url_get_schedule, params);
             return null;
         }
 

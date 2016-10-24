@@ -11,8 +11,11 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/lvStations" />
+        android:id="@+id/lvStations"
+        android:layout_height="wrap_content"
+        android:dividerHeight="0dp"
+        android:background="@color/colorPrimary"
+        android:divider="@color/colorPrimary"/>
 
     <RelativeLayout
         android:orientation="vertical"
@@ -21,10 +24,11 @@
         android:id="@+id/layout_calendar"
         android:layout_below="@+id/lvStations"
         android:layout_marginTop="21dp"
-        android:layout_marginLeft="7dp"
         android:clickable="true"
-        android:background="@drawable/fon_toast"
-        android:layout_marginRight="7dp">
+        android:background="@color/colorBlue"
+        android:paddingLeft="7dp"
+        android:elevation="5dp"
+        android:translationZ="5dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,17 +41,19 @@
             android:layout_marginLeft="21dp"
             android:clickable="false"
             android:textColor="@android:color/white"
-            android:textColorHint="@color/white_100"
-            android:hint="22.10.2016" />
+            android:textColorHint="@color/colorPrimary"
+            android:hint="22.10.2016"
+            android:layout_centerHorizontal="true" />
 
         <TextView
-            android:text=" Дата отправления:"
+            android:text="@string/text_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView"
             android:textSize="16sp"
             android:textStyle="normal|italic"
-            android:textColor="?attr/actionMenuTextColor" />
+            android:textColor="@android:color/white"
+            android:gravity="center" />
 
     </RelativeLayout>
 

@@ -9,10 +9,30 @@
     <string name="btn_OK"> OK </string>
 
     <string name="menu_search">Поиск</string>
-    <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!--choose activity-->
+    <string name="tvCountry_toast"> Страна, регион:</string>
+    <string name="tvSity_toast"> Город, район:</string>
+    <string name="btnChoose">Выбрать</string>
+    <string name="btnCancle">Отмена</string>
+
+    <string name="update_data">Обновление данных. Подождите...</string>
+    <string name="update_data_good">Данные обновлены!</string>
+
+    <!--main activity-->
+    <string name="no_connection_network">Нет подключения к интернету!</string>
+    <string name="text_date">Дата отправления:</string>
+    <string name="text_site">www.tutu.ru</string>
+    <string name="hint_choose">Выберите...</string>
+    <string name="text_from"> Откуда:</string>
+    <string name="text_where"> Куда:</string>
+
+    <!--splash screen-->
+    <string name="load_data">Загрузка данных...</string>
+
 </resources>

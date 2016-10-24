@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
@@ -82,10 +84,11 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
 
     // элементы экрана
     ListView lvSchedule;
-    TextView tvCountry, tvRegion, tvDiscrict, tvSity, tvName;
+    TextView tvCountry, tvSity, tvName;
     Button btnCancle, btnChoose;
     RelativeLayout layoutInfo;
     ProgressDialog pDialog;
+    ImageView secondFon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +100,19 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
         layoutInfo = (RelativeLayout) findViewById(R.id.layout_details_item);
         tvName = (TextView) findViewById(R.id.tvNameStation);
         tvCountry = (TextView) findViewById(R.id.tvCountry_toast);
-        tvRegion = (TextView) findViewById(R.id.tvRegion_toast);
-        tvDiscrict = (TextView) findViewById(R.id.tvDistrict_toast);
         tvSity = (TextView) findViewById(R.id.tvSity_toast);
         btnChoose = (Button) findViewById(R.id.btnChoose_toast);
         btnCancle = (Button) findViewById(R.id.btnCancle_toast);
+        secondFon = (ImageView) findViewById(R.id.secondFon);
         //
         btnChoose.setOnClickListener(this);
         btnCancle.setOnClickListener(this);
+        secondFon.setOnClickListener(this);
         lvSchedule.setOnItemClickListener(this);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // получаем данные из intent
         scheduleTable = getIntent().getStringExtra(TAG_DATA);
@@ -121,29 +128,25 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
             // кнопка выбора данной станции => переход на главное активити
             case R.id.btnChoose_toast:
                 intent = new Intent(ChooseActivity.this, MainActivity.class);
+                //
                 intent.putExtra(TAG_NAME_STATION, tvName.getText());
-                if (tvRegion.length() == 0){
-                    intent.putExtra(TAG_LOCATION_1, tvCountry.getText());
-                }else {
-                    intent.putExtra(TAG_LOCATION_1, tvCountry.getText() + ", " + tvRegion.getText());
-                }
-
-                if (tvDiscrict.length() == 0){
-                    intent.putExtra(TAG_LOCATION_2, tvSity.getText());
-                }else{
-                    intent.putExtra(TAG_LOCATION_2, tvSity.getText()+", "+tvDiscrict.getText());
-                }
-
+                intent.putExtra(TAG_LOCATION_1, tvCountry.getText());
+                intent.putExtra(TAG_LOCATION_2, tvSity.getText());
                 intent.putExtra(TAG_DATA, scheduleTable);
-                Log.d(LOG_TAG,scheduleTable);
-                Log.d(LOG_TAG, tvCountry.getText()+", "+tvRegion.getText()+",\n"+
-                        tvDiscrict.getText()+", "+tvSity.getText());
+                //
                 startActivity(intent);
+                finish();
                 break;
 
             // закрытие окна доп. информации
             case R.id.btnCancle_toast:
                 layoutInfo.setVisibility(View.INVISIBLE);
+                secondFon.setVisibility(View.INVISIBLE);
+                break;
+
+            case R.id.secondFon:
+                layoutInfo.setVisibility(View.INVISIBLE);
+                secondFon.setVisibility(View.INVISIBLE);
                 break;
         }
     }
@@ -155,11 +158,12 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
          * Перед началом фонового потока Show Progress Dialog
          * */
         String arg = "null";
+        boolean flag_toast = false;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(ChooseActivity.this);
-            pDialog.setMessage("Загрузка рассписания. Подождите...");
+            pDialog.setMessage(getResources().getString(R.string.update_data));
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -173,6 +177,7 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
             // получаем JSON строк с URL
             JSONObject json = jParser.getJSON();
             if (json == null) {
+                flag_toast = false;
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 json = jParser.makeHttpRequest(url_get_schedule, params);
             }
@@ -220,7 +225,9 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
             // закрываем прогресс диалог
             pDialog.dismiss();
 
-            Toast.makeText(ChooseActivity.this, "Рассписание обновлено!", Toast.LENGTH_SHORT).show();
+            if (flag_toast) {
+                Toast.makeText(ChooseActivity.this, getResources().getString(R.string.update_data_good), Toast.LENGTH_SHORT).show();
+            }
 
             // обновление адаптера
             adapter = new SimpleAdapter(ChooseActivity.this, listStation, R.layout.item,
@@ -234,15 +241,25 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        String str = String.valueOf((parent.getAdapter().getItem(position)));
+        String data = String.valueOf((parent.getAdapter().getItem(position)));
 
         layoutInfo.setVisibility(View.VISIBLE);
-        tvName.setText(search(TAG_NAME_STATION, str));
-        tvCountry.setText(search(TAG_COUNTRY, str));
-        tvRegion.setText(search(TAG_REGION, str));
-        tvDiscrict.setText(search(TAG_DISTRICT, str));
-        tvSity.setText(search(TAG_SITY, str));
+        tvName.setText(search(TAG_NAME_STATION, data));
+        // location_1
+        if (search(TAG_REGION, data).equals("")){
+            tvCountry.setText(search(TAG_COUNTRY, data));
+        }else{
+            tvCountry.setText(search(TAG_COUNTRY, data)+", "+search(TAG_REGION, data));
+        }
 
+        // location_2
+        if (search(TAG_DISTRICT, data).equals("")){
+            tvSity.setText(search(TAG_SITY, data));
+        }else{
+            tvSity.setText(search(TAG_SITY, data)+", "+search(TAG_DISTRICT, data));
+        }
+
+        secondFon.setVisibility(View.VISIBLE);
     }
 
     // поиск значения по тегу в строке элементов (используется в onItemClick)
@@ -289,7 +306,10 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             // нажатие кнопки home
-            case R.id.home:
+            case android.R.id.home:
+                Intent intent = new Intent(ChooseActivity.this, MainActivity.class);
+                intent.putExtra(TAG_DATA, "null");
+                startActivity(intent);
                 finish();
                 break;
         }
@@ -297,10 +317,12 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
     }
     //--------------------------------------------------------------------------------------------<<
 
+    // нажатие на back
     @Override
-    protected void onPause() {
-        // TODO Auto-generated method stub
-        super.onPause();
+    public void onBackPressed() {
+        Intent intent = new Intent(ChooseActivity.this, MainActivity.class);
+        intent.putExtra(TAG_DATA, "null");
+        startActivity(intent);
         finish();
     }
 }
