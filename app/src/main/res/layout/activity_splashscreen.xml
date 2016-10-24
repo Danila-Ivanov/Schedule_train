@@ -16,12 +16,12 @@
 
     <ProgressBar
         android:indeterminateDrawable="@drawable/loader_progress"
-        android:layout_height="70dp"
-        android:layout_width="70dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="27dp"
         android:id="@+id/pbar"
-        android:layout_above="@+id/textView2">
+        android:layout_above="@+id/textView2"
+        android:layout_width="60dp"
+        android:layout_height="60dp">
     </ProgressBar>
 
     <TextView

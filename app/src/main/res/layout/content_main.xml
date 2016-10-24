@@ -11,7 +11,7 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:id="@+id/lvStations" />
 
     <RelativeLayout
@@ -22,7 +22,9 @@
         android:layout_below="@+id/lvStations"
         android:layout_marginTop="21dp"
         android:layout_marginLeft="7dp"
-        android:clickable="true">
+        android:clickable="true"
+        android:background="@drawable/fon_toast"
+        android:layout_marginRight="7dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,16 +35,18 @@
             android:fontFamily="serif"
             android:layout_below="@+id/textView"
             android:layout_marginLeft="21dp"
-            android:clickable="true"
-            android:text="21.10.2016" />
+            android:clickable="false"
+            android:text="21.10.2016"
+            android:textColor="@android:color/white" />
 
         <TextView
-            android:text="Дата: "
+            android:text=" Дата отправления:"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView"
             android:textSize="16sp"
-            android:textStyle="normal|italic" />
+            android:textStyle="normal|italic"
+            android:textColor="@color/white_100" />
 
     </RelativeLayout>
 

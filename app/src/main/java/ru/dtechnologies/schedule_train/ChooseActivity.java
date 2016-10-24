@@ -210,29 +210,6 @@ public class ChooseActivity extends AppCompatActivity implements AdapterView.OnI
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-           /* HashMap<String, String> map = new HashMap<String, String>();
-
-            //map.put(TAG_ID, p.getString(TAG_ID));
-            map.put(TAG_NAME_STATION, "Werty");
-            map.put(TAG_COUNTRY, "Россия");
-            map.put(TAG_REGION, "Центральная россия");
-            map.put(TAG_SITY, "Савёлки");
-            map.put(TAG_DISTRICT, "Московская область");
-
-            listStation.add(map);
-
-            map = new HashMap<String, String>();
-
-            //map.put(TAG_ID, p.getString(TAG_ID));
-            map.put(TAG_NAME_STATION, "erty");
-            map.put(TAG_COUNTRY, "Россия");
-            map.put(TAG_REGION, "Центральная россия");
-            map.put(TAG_SITY, "Кимовск");
-            map.put(TAG_DISTRICT, "Тульская область");
-
-            listStation.add(map);*/
-
             return null;
         }
 

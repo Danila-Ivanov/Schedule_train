@@ -15,15 +15,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/layout_details_item"
         android:padding="14dp"
-        android:background="@color/colorPrimary_135"
+        android:background="@drawable/fon_toast"
         android:layout_centerInParent="true"
-        android:layout_width="350dp"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_width="300dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white">
+            android:background="@drawable/fon_toast_2">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvNameStation"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:textStyle="normal|bold"
                 android:layout_centerHorizontal="true" />
 
@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView10"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="normal|italic" />
 
                 <TextView
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tvCountry_toast"
                     android:layout_marginLeft="21dp"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="normal|bold" />
 
                 <TextView
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/textView11"
                     android:layout_marginTop="14dp"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="normal|italic" />
 
                 <TextView
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tvRegion_toast"
                     android:layout_marginLeft="21dp"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="normal|bold" />
 
                 <TextView
@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/textView8"
                     android:layout_marginTop="14dp"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="normal|italic" />
 
                 <TextView
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tvDistrict_toast"
                     android:layout_marginLeft="21dp"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="normal|bold" />
 
                 <TextView
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
                     android:layout_marginTop="14dp"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="normal|italic" />
 
                 <TextView
@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tvSity_toast"
                     android:layout_marginLeft="21dp"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="normal|bold" />
             </LinearLayout>
 
