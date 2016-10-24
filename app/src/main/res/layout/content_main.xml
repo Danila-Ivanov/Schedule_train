@@ -11,7 +11,7 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="match_parent"
         android:id="@+id/lvStations" />
 
     <RelativeLayout
@@ -36,8 +36,9 @@
             android:layout_below="@+id/textView"
             android:layout_marginLeft="21dp"
             android:clickable="false"
-            android:text="21.10.2016"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/white_100"
+            android:hint="22.10.2016" />
 
         <TextView
             android:text=" Дата отправления:"
@@ -46,7 +47,7 @@
             android:id="@+id/textView"
             android:textSize="16sp"
             android:textStyle="normal|italic"
-            android:textColor="@color/white_100" />
+            android:textColor="?attr/actionMenuTextColor" />
 
     </RelativeLayout>
 
